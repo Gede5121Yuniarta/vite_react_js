@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Drawer from '@mui/material/Drawer';
-import Button from '@mui/material/Button';
+// import Button from '@mui/material/Button';
 import Avatar from '@mui/material/Avatar';
 import { alpha } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
@@ -69,10 +69,10 @@ export default function Nav({ openNav, onCloseNav }) {
       ))}
     </Stack>
   );
-
+  
   const renderUpgrade = (
     <Box sx={{ px: 2.5, pb: 3, mt: 10 }}>
-      <Stack alignItems="center" spacing={3} sx={{ pt: 5, borderRadius: 2, position: 'relative' }}>
+      {/* <Stack alignItems="center" spacing={3} sx={{ pt: 5, borderRadius: 2, position: 'relative' }}>
         <Box
           component="img"
           src="/assets/illustrations/illustration_avatar.png"
@@ -95,7 +95,7 @@ export default function Nav({ openNav, onCloseNav }) {
         >
           Upgrade to Pro
         </Button>
-      </Stack>
+      </Stack> */}
     </Box>
   );
 
