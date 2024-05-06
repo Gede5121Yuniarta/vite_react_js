@@ -1,4 +1,3 @@
-// eslint-disable-next-line import/no-extraneous-dependencies
 import axios from 'axios';
 import React, { useState, useEffect } from 'react';
 
@@ -9,10 +8,8 @@ import Typography from '@mui/material/Typography';
 import AppTasks from '../app-tasks';
 
 export default function AppView() {
-    // State untuk menyimpan data dari API
     const [priorities, setPriorities] = useState([]);
 
-    // Gunakan useEffect untuk mengambil data dari API saat komponen dimuat
     useEffect(() => {
         const fetchPriorities = async () => {
             try {
@@ -33,12 +30,12 @@ export default function AppView() {
             </Typography>
 
             <Grid container spacing={3}>
-                {/* Komponen AppTasks dengan prop list yang berisi data dari API */}
                 <Grid xs={12} md={6} lg={12}>
                     <AppTasks
                         title="List Priorities"
-                        list={priorities.map((item) => ({
+                        list={priorities.map((item, index) => ({
                             id: item.id_priority,
+                            number: index + 1, // Tambahkan nomor urut
                             name: item.priority_name,
                         }))}
                     />

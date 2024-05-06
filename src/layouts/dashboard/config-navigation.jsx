@@ -23,7 +23,7 @@ const navConfig = [
     icon: icon('ic_user'),
   },
   // {
-  //   title: 'blog',
+  //   title: 'Create Issues',
   //   path: '/blog',
   //   icon: icon('ic_blog'),
   // },

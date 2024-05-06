@@ -17,7 +17,7 @@ import {
 
 import Iconify from 'src/components/iconify';
 
-export default function ProductsCard({ title, list }) {
+export default function UserTable({ title, list, onDelete }) {
     const [anchorEl, setAnchorEl] = useState(null);
     const [currentTask, setCurrentTask] = useState(null);
 
@@ -38,8 +38,10 @@ export default function ProductsCard({ title, list }) {
     };
 
     const handleDelete = () => {
-        // Tambahkan fungsi untuk menghapus data di sini
-        console.log(`Delete task: ${currentTask.id}`);
+        if (currentTask && onDelete) {
+            onDelete(currentTask.nim, currentTask.id);
+            console.log(`Delete task: ${currentTask.id}`);
+        }
         handleCloseMenu();
     };
 
@@ -52,8 +54,9 @@ export default function ProductsCard({ title, list }) {
                     <TableHead>
                         <TableRow>
                             <TableCell>No</TableCell>
-                            <TableCell>Division Target</TableCell>
-                            <TableCell>Division Department Name</TableCell>
+                            <TableCell>NIM</TableCell>
+                            <TableCell>Title Issues</TableCell>
+                            <TableCell>Rating</TableCell>
                             <TableCell>Actions</TableCell>
                         </TableRow>
                     </TableHead>
@@ -61,8 +64,9 @@ export default function ProductsCard({ title, list }) {
                         {list.map((task, index) => (
                             <TableRow key={task.id}>
                                 <TableCell>{index + 1}</TableCell>
-                                <TableCell>{task.divisionTarget}</TableCell>
-                                <TableCell>{task.divisionDepartmentName}</TableCell>
+                                <TableCell>{task.nim}</TableCell>
+                                <TableCell>{task.titleIssues}</TableCell>
+                                <TableCell>{task.rating}</TableCell>
                                 <TableCell>
                                     <IconButton onClick={(event) => handleClickMenu(event, task)}>
                                         <Iconify icon="eva:more-vertical-fill" />
@@ -94,7 +98,8 @@ export default function ProductsCard({ title, list }) {
     );
 }
 
-ProductsCard.propTypes = {
+UserTable.propTypes = {
     list: PropTypes.array.isRequired,
     title: PropTypes.string.isRequired,
+    onDelete: PropTypes.func, // Tambahkan prop onDelete
 };

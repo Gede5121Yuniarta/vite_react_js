@@ -2,116 +2,97 @@ import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 
 import Card from '@mui/material/Card';
-import Stack from '@mui/material/Stack';
+import Table from '@mui/material/Table';
 import Popover from '@mui/material/Popover';
+import TableRow from '@mui/material/TableRow';
 import MenuItem from '@mui/material/MenuItem';
-import Checkbox from '@mui/material/Checkbox';
-import IconButton from '@mui/material/IconButton';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableHead from '@mui/material/TableHead';
 import CardHeader from '@mui/material/CardHeader';
-import FormControlLabel from '@mui/material/FormControlLabel';
+import IconButton from '@mui/material/IconButton';
+import TableContainer from '@mui/material/TableContainer';
 
 import Iconify from 'src/components/iconify';
 
-function AppTasks({ title, subheader, list, ...other }) {
-    const [selected, setSelected] = useState([]);
+function AppTasks({ title, list }) {
+    const [anchorEl, setAnchorEl] = useState(null);
+    const [currentTask, setCurrentTask] = useState(null);
 
-    // Fungsi untuk menangani perubahan status tugas
-    const handleClickComplete = (taskId) => {
-        const tasksCompleted = selected.includes(taskId)
-            ? selected.filter((value) => value !== taskId)
-            : [...selected, taskId];
+    const handleClickMenu = (event, task) => {
+        setAnchorEl(event.currentTarget);
+        setCurrentTask(task);
+    };
 
-        setSelected(tasksCompleted);
+    const handleCloseMenu = () => {
+        setAnchorEl(null);
+        setCurrentTask(null);
+    };
+
+    const handleEdit = () => {
+        // Tambahkan fungsi edit di sini
+        console.log(`Edit task: ${currentTask.id}`);
+        handleCloseMenu();
+    };
+
+    const handleDelete = () => {
+        // Tambahkan fungsi delete di sini
+        console.log(`Delete task: ${currentTask.id}`);
+        handleCloseMenu();
     };
 
     return (
-        <Card {...other}>
-            <CardHeader title={title} subheader={subheader} />
+        <Card>
+            <CardHeader title={title} />
 
-            {list.map((task) => (
-                <TaskItem
-                    key={task.id}
-                    task={task}
-                    checked={selected.includes(task.id)}
-                    onChange={() => handleClickComplete(task.id)}
-                />
-            ))}
+            <TableContainer>
+                <Table>
+                    <TableHead>
+                        <TableRow>
+                            <TableCell>No</TableCell>
+                            <TableCell>Priority Name</TableCell>
+                            <TableCell>Actions</TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {list.map((task) => (
+                            <TableRow key={task.id}>
+                                <TableCell>{task.number}</TableCell>
+                                <TableCell>{task.name}</TableCell>
+                                <TableCell>
+                                    <IconButton onClick={(event) => handleClickMenu(event, task)}>
+                                        <Iconify icon="eva:more-vertical-fill" />
+                                    </IconButton>
+
+                                    <Popover
+                                        open={Boolean(anchorEl)}
+                                        anchorEl={anchorEl}
+                                        onClose={handleCloseMenu}
+                                        anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
+                                        transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+                                    >
+                                        <MenuItem onClick={handleEdit}>
+                                            <Iconify icon="solar:pen-bold" sx={{ mr: 2 }} />
+                                            Edit
+                                        </MenuItem>
+                                        <MenuItem onClick={handleDelete} sx={{ color: 'error.main' }}>
+                                            <Iconify icon="solar:trash-bin-trash-bold" sx={{ mr: 2 }} />
+                                            Delete
+                                        </MenuItem>
+                                    </Popover>
+                                </TableCell>
+                            </TableRow>
+                        ))}
+                    </TableBody>
+                </Table>
+            </TableContainer>
         </Card>
     );
 }
 
 AppTasks.propTypes = {
-    list: PropTypes.array.isRequired,
-    subheader: PropTypes.string,
     title: PropTypes.string.isRequired,
-};
-
-// Komponen untuk menampilkan item tugas
-function TaskItem({ task, checked, onChange }) {
-    const [open, setOpen] = useState(null);
-
-    const handleOpenMenu = (event) => {
-        setOpen(event.currentTarget);
-    };
-
-    const handleCloseMenu = () => {
-        setOpen(null);
-    };
-
-    return (
-        <>
-            <Stack
-                direction="row"
-                alignItems="center"
-                sx={{
-                    pl: 2,
-                    pr: 1,
-                    py: 1,
-                    '&:not(:last-of-type)': {
-                        borderBottom: (theme) => `dashed 1px ${theme.palette.divider}`,
-                    },
-                    ...(checked && {
-                        color: 'text.disabled',
-                        textDecoration: 'line-through',
-                    }),
-                }}
-            >
-                <FormControlLabel
-                    control={<Checkbox checked={checked} onChange={onChange} />}
-                    label={task.name}
-                    sx={{ flexGrow: 1, m: 0 }}
-                />
-
-                <IconButton color={open ? 'inherit' : 'default'} onClick={handleOpenMenu}>
-                    <Iconify icon="eva:more-vertical-fill" />
-                </IconButton>
-            </Stack>
-
-            <Popover
-                open={!!open}
-                anchorEl={open}
-                onClose={handleCloseMenu}
-                anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
-                transformOrigin={{ vertical: 'top', horizontal: 'right' }}
-            >
-                <MenuItem onClick={handleCloseMenu}>
-                    <Iconify icon="solar:pen-bold" sx={{ mr: 2 }} />
-                    Edit
-                </MenuItem>
-
-                <MenuItem onClick={handleCloseMenu} sx={{ color: 'error.main' }}>
-                    <Iconify icon="solar:trash-bin-trash-bold" sx={{ mr: 2 }} />
-                    Delete
-                </MenuItem>
-            </Popover>
-        </>
-    );
-}
-
-TaskItem.propTypes = {
-    checked: PropTypes.bool,
-    onChange: PropTypes.func.isRequired,
-    task: PropTypes.object.isRequired,
+    list: PropTypes.array.isRequired,
 };
 
 export default AppTasks;
